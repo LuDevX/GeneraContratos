@@ -13,22 +13,37 @@ def generar_contratos():
 
     try:
         df = pd.read_excel(excel_path)
-        output_folder = os.path.join(os.path.dirname(
-            excel_path), "contratos_generados_gui")
+        df.columns = df.columns.str.lower()
+        output_folder = os.path.join(
+            os.path.dirname(excel_path), "Contratos generados")
         os.makedirs(output_folder, exist_ok=True)
 
-        for _, fila in df.iterrows():
-            doc = Document(plantilla_path)
-            for parrafo in doc.paragraphs:
-                for clave, valor in fila.items():
-                    if pd.notna(valor):
-                        parrafo.text = parrafo.text.replace(
-                            f"{{{{{clave}}}}}", str(valor))
-            nombre = f"Contrato_{fila.iloc[0].replace(' ', '_')}_{datetime.now().strftime('%Y%m%d%H%M%S')}.docx"
-            doc.save(os.path.join(output_folder, nombre))
+        log_path = os.path.join(output_folder, "log_contratos.txt")
+        total_generados = 0
+
+        with open(log_path, "a", encoding="utf-8") as log_file:
+            log_file.write(
+                f"\n--- Contratos generados el {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} ---\n")
+
+            for _, fila in df.iterrows():
+                doc = Document(plantilla_path)
+                for parrafo in doc.paragraphs:
+                    for clave, valor in fila.items():
+                        if pd.notna(valor):
+                            parrafo.text = parrafo.text.replace(
+                                f"{{{{{clave}}}}}", str(valor))
+
+                nombre_base = str(
+                    fila.get("nombre", "desconocido")).strip().replace(" ", "_")
+                nombre_archivo = f"Contrato_{nombre_base}.docx"
+                ruta_archivo = os.path.join(output_folder, nombre_archivo)
+                doc.save(ruta_archivo)
+
+                log_file.write(f"✅ {nombre_archivo} generado correctamente.\n")
+                total_generados += 1
 
         messagebox.showinfo(
-            "Éxito", f"Contratos generados en:\n{output_folder}")
+            "Éxito", f"Se generaron {total_generados} contratos en:\n{output_folder}")
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un error:\n{e}")
 
