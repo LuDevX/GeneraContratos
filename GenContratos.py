@@ -1,8 +1,16 @@
-from tkinter import Tk, Label, Button, filedialog, messagebox
+from tkinter import Tk, Label, Button, filedialog, messagebox, PhotoImage
 import pandas as pd
 from docx import Document
 import os
 from datetime import datetime
+
+
+def centrar_ventana(ventana, ancho, alto):
+    pantalla_ancho = ventana.winfo_screenwidth()
+    pantalla_alto = ventana.winfo_screenheight()
+    x = int((pantalla_ancho / 2) - (ancho / 2))
+    y = int((pantalla_alto / 2) - (alto / 2))
+    ventana.geometry(f"{ancho}x{alto}+{x}+{y}")
 
 
 def generar_contratos():
@@ -80,7 +88,14 @@ output_folder = ""
 
 ventana = Tk()
 ventana.title("Generador de Contratos")
-ventana.geometry("400x300")
+ventana.resizable(False, False)
+centrar_ventana(ventana, 400, 300)
+
+
+# Cambiar el icono de la ventana (asegurate de que el archivo esté en la ruta correcta)
+icono = PhotoImage(
+    file=r"C:\Users\usuario\Desktop\Proyecto Personal\GeneraContratos\icono.png")
+ventana.iconphoto(True, icono)
 
 Label(ventana, text="Generador de Contratos",
       font=("Helvetica", 16)).pack(pady=10)
