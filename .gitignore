@@ -1,0 +1,16 @@
+# Evita subir dependencias de Maven
+.m2/
+**/target/
+**/build/
+*.jar
+*.class
+*.log
+
+# VS Code settings
+.vscode/
+
+# Archivos temporales
+*.pyc
+__pycache__/
+.DS_Store
+*.swp
