@@ -15,4 +15,4 @@ for i, row in df.iterrows():
     nombre_archivo = f"Contrato_{row['NOMBRE'].replace(' ', '_')}.docx"
     doc.save(os.path.join(output_dir, nombre_archivo))
 
-print("¡Contratos generados exitosamente!")
+print("¡Contratos generados exitosamente!xsd")
