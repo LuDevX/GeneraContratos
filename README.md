@@ -28,7 +28,7 @@ GenContratos/
 
 ## ▶️ Cómo se usa
 
-1. Abrí el Excel `datos_contratos.xlsx` y llenalo con tus datos
+1. Abrir el Excel `datos_contratos.xlsx` y llenalo con tus datos
 2. Asegurate que el Word tenga etiquetas como `{{NOMBRE}}`, `{{RUT}}`, etc.
 3. Corre el script:
 
@@ -67,4 +67,4 @@ pip install pandas python-docx
 
 ## 🤝 Licencia
 
-Licencia de uso personal. Si querís una versión con más funciones o soporte, hablame 😉
+Licencia de uso personal. Si quieres una versión con más funciones o soporte, hablame 😉
