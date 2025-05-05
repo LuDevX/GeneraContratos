@@ -4,6 +4,8 @@ from docx import Document
 import os
 from datetime import datetime
 
+# Centrar la ventana
+
 
 def centrar_ventana(ventana, ancho, alto):
     pantalla_ancho = ventana.winfo_screenwidth()
@@ -11,6 +13,16 @@ def centrar_ventana(ventana, ancho, alto):
     x = int((pantalla_ancho / 2) - (ancho / 2))
     y = int((pantalla_alto / 2) - (alto / 2))
     ventana.geometry(f"{ancho}x{alto}+{x}+{y}")
+
+# Funciones de hover
+
+
+def on_enter(e):
+    e.widget.config(bg="#45a049")
+
+
+def on_leave(e):
+    e.widget.config(bg="#4CAF50")
 
 
 def generar_contratos():
@@ -21,7 +33,6 @@ def generar_contratos():
 
     try:
         df = pd.read_excel(excel_path)
-        df.columns = df.columns.str.lower()
 
         # Crear la subcarpeta "Contratos Generados" dentro de la carpeta de destino seleccionada
         contratos_folder = os.path.join(output_folder, "Contratos Generados")
@@ -43,7 +54,7 @@ def generar_contratos():
                                 f"{{{{{clave}}}}}", str(valor))
 
                 nombre_base = str(
-                    fila.get("nombre", "desconocido")).strip().replace(" ", "_")
+                    fila.get("NOMBRE", "desconocido")).strip().replace(" ", "_")
                 nombre_archivo = f"Contrato_{nombre_base}.docx"
                 ruta_archivo = os.path.join(contratos_folder, nombre_archivo)
                 doc.save(ruta_archivo)
@@ -88,33 +99,49 @@ output_folder = ""
 
 ventana = Tk()
 ventana.title("Generador de Contratos")
+ventana.configure(bg="#f2f2f2")
 ventana.resizable(False, False)
-centrar_ventana(ventana, 400, 300)
+centrar_ventana(ventana, 400, 360)
 
+# Icono (opcional, asegurate que esté en esa ruta o cambiala)
+try:
+    icono = PhotoImage(
+        file=r"C:\Users\usuario\Desktop\Proyecto Personal\GeneraContratos\icono.png")
+    ventana.iconphoto(True, icono)
+except Exception as e:
+    print("No se pudo cargar el ícono:", e)
 
-# Cambiar el icono de la ventana (asegurate de que el archivo esté en la ruta correcta)
-icono = PhotoImage(
-    file=r"C:\Users\usuario\Desktop\Proyecto Personal\GeneraContratos\icono.png")
-ventana.iconphoto(True, icono)
-
+# Título
 Label(ventana, text="Generador de Contratos",
-      font=("Helvetica", 16)).pack(pady=10)
+      font=("Helvetica", 16, "bold"), bg="#f2f2f2", fg="#333333").pack(pady=10)
+
+# Botones y etiquetas
 Button(ventana, text="Seleccionar plantilla Word",
-       command=seleccionar_plantilla).pack(pady=5)
-label_plantilla = Label(ventana, text="Plantilla: No seleccionada")
+       command=seleccionar_plantilla, bg="#4CAF50", fg="white",
+       activebackground="#45a049").pack(pady=5)
+label_plantilla = Label(
+    ventana, text="Plantilla: No seleccionada", bg="#f2f2f2", fg="#555555")
 label_plantilla.pack()
 
 Button(ventana, text="Seleccionar archivo Excel",
-       command=seleccionar_excel).pack(pady=5)
-label_excel = Label(ventana, text="Excel: No seleccionado")
+       command=seleccionar_excel, bg="#4CAF50", fg="white",
+       activebackground="#45a049").pack(pady=5)
+label_excel = Label(ventana, text="Excel: No seleccionado",
+                    bg="#f2f2f2", fg="#555555")
 label_excel.pack()
 
 Button(ventana, text="Seleccionar carpeta de destino",
-       command=seleccionar_carpeta_destino).pack(pady=5)
-label_carpeta = Label(ventana, text="Carpeta de destino: No seleccionada")
+       command=seleccionar_carpeta_destino, bg="#4CAF50", fg="white",
+       activebackground="#45a049").pack(pady=5)
+label_carpeta = Label(
+    ventana, text="Carpeta de destino: No seleccionada", bg="#f2f2f2", fg="#555555")
 label_carpeta.pack()
 
-Button(ventana, text="Generar contratos", command=generar_contratos,
-       bg="#4CAF50", fg="white").pack(pady=20)
+# Botón de generar contratos
+boton_generar = Button(ventana, text="Generar contratos", command=generar_contratos,
+                       bg="#4CAF50", fg="white", activebackground="#45a049", font=("Helvetica", 10, "bold"))
+boton_generar.pack(pady=20)
+boton_generar.bind("<Enter>", on_enter)
+boton_generar.bind("<Leave>", on_leave)
 
 ventana.mainloop()
